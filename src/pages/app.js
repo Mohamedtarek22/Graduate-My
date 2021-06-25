@@ -12,6 +12,7 @@ import handImages from '../images/handImages.svg';
 import {
     Text,
     Heading,
+    Grid,
     Button,
     Image,
     Stack,
@@ -29,15 +30,18 @@ useDisclosure,
 Link,
     ChakraProvider
 } from '@chakra-ui/react'
+import { useSpeechSynthesis } from "react-speech-kit"
 
 import {Signimage, Signpass} from '../handimage';
 
 import '../styles/App.css'
-
+import About from "../components/about"
 import '@tensorflow/tfjs-backend-webgl';
-
+import Metatags from "../components/metatags"
+var res = ""
 export default function App() {
-
+    const [value, setValue] = useState("")
+    const { speak } = useSpeechSynthesis()
     const { isOpen, onOpen, onClose } = useDisclosure()
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
@@ -46,7 +50,7 @@ export default function App() {
 
     const [sign, setSign] = useState(null);
 
-
+    const isBrowser = typeof window !== "undefined"
     let signList = [];
     let currentSign = 0;
 
@@ -196,85 +200,148 @@ export default function App() {
 
 
     return (
+        <div>
         <ChakraProvider>
-            <Helmet>
-          <meta charSet="utf-8" />
-          <title>Handsign | Learn ASL using AI camera</title>
-        </Helmet>
-            <Container maxW="xl" centerContent>
-                <VStack spacing={4} align="center">
-                    <Box h="20px"></Box>
-                    <Heading as="h3" size="md" className="tutor-text" color="white" textAlign="center"></Heading>
-                    <Box h="20px"></Box>
-                </VStack>
-
-                <Heading as="h1" size="lg" id="app-title" color="white" textAlign="center">🧙‍♀️ Loading the Magic 🧙‍♂️</Heading>
-
-                <div id="webcam-container">
-                    {camState === 'on'
-                        ? <Webcam id="webcam" ref={webcamRef}/>
-                        : <div id="webcam" background="black"></div>}
-
-                    {sign 
-                        ? (<div style={{
-                            position: "absolute",
-                            marginLeft: "auto",
-                            marginRight: "auto",
-                            right: "calc(50% - 50px)",
-                            bottom: 100,
-                            textAlign: "-webkit-center",}}>
-                            <Text color="white" fontSize="sm" mb={1}>detected gestures</Text>
-                        <img
-                            src={Signimage[sign]}
-                            style={{
-                            height: 30
-                        }}/>
-                        </div>
-                        )
-                        : (" ")}
-                </div>
-
-                <canvas id="gesture-canvas" ref={canvasRef} style={{}}/>
-
-                <div
-                    id="singmoji"
+          <Metatags />
+  
+          <Box bgColor="#5784BA">
+            <Container centerContent maxW="xl" height="100vh" pt="0" pb="0">
+              <VStack spacing={4} align="center">
+                <Box h="20px"></Box>
+                <Heading
+                  as="h3"
+                  size="md"
+                  className="tutor-text"
+                  color="white"
+                  textAlign="center"
+                ></Heading>
+                <Box h="20px"></Box>
+              </VStack>
+  
+              <Heading
+                as="h1"
+                size="lg"
+                id="app-title"
+                color="white"
+                textAlign="center"
+              >
+                🧙‍♀️ Loading the Magic 🧙‍♂️
+              </Heading>
+              {/* {setValue(sign)} */}
+  
+              <Box id="webcam-container">
+                {camState === "on" ? (
+                  <Webcam id="webcam" ref={webcamRef} />
+                ) : (
+                  <div id="webcam" background="black"></div>
+                )}
+  
+                {/* {console.log(value)}
+                      {console.log(sign)} */}
+  
+                {sign ? (
+                  <div
                     style={{
-                    zIndex: 9,
-                    position: 'fixed',
-                    top: '50px',
-                    right: '30px'
-                }}></div>
-
-                <Image h="150px" objectFit="cover" id='emojimage'/> 
-{/* <pre className="pose-data" color="white" style={{position: 'fixed', top: '150px', left: '10px'}} >Pose data</pre> */}
-
+                      position: "absolute",
+                      marginLeft: "auto",
+                      marginRight: "auto",
+                      right: "calc(50% - 50px)",
+                      bottom: 100,
+                      textAlign: "-webkit-center",
+                    }}
+                  >
+                    <Text color="white" fontSize="sm" mb={1}>
+                      detected gestures
+                    </Text>
+                    <img
+                      alt="signImage"
+                      src={Signimage[sign]}
+                      style={{
+                        height: 30,
+                      }}
+                    />
+                    <Text color="#d9af40" fontSize="50" mb={1}>
+                      {value ? value : "Empty"}
+                    </Text>
+                  </div>
+                ) : (
+                  " "
+                )}
+                {/* <button onClick={()=> speak({text: value})} >nnnn</button> */}
+              </Box>
+  
+              <canvas id="gesture-canvas" ref={canvasRef} style={{}} />
+  
+              <Box
+                id="singmoji"
+                style={{
+                  zIndex: 9,
+                  position: "fixed",
+                  top: "50px",
+                  right: "30px",
+                }}
+              ></Box>
+  
+              <Image h="150px" objectFit="cover" id="emojimage" />
+              {/* <pre className="pose-data" color="white" style={{position: 'fixed', top: '150px', left: '10px'}} >Pose data</pre> */}
             </Container>
-
-            <Stack id="start-button" spacing={4} direction="row" align="center">
-                <Button onClick={turnOffCamera} colorScheme="orange">Camera</Button>
-                <Button onClick={onOpen} colorScheme="orange">Learn More</Button>
+            {/* {console.log(value)} */}
+  
+            <Stack
+              id="start-button"
+              style={{ width: "100%",marginLeft: "-271px" }}
+              direction="row"
+              align="start"
+            >
+              <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+                <Button
+                  onClick={() => speak({ text: value })}
+                  // style={{ width: "36%", marginRight: "20" }}
+                  colorScheme="orange"
+                >
+                  Speaker
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (sign == "Space") {
+                      res += " "
+                    } else {
+                      res += sign
+                    }
+                    setValue(res)
+                  }}
+                  // style={{ width: "100%" }}
+                  colorScheme="orange"
+                >
+                  Choose alphabet
+                </Button>
+                <Button
+                  onClick={() => {
+                    res = ""
+                    setValue("")
+                  }}
+                  colorScheme="orange"
+                >
+                  Clear
+                </Button>
+                <Button
+                  onClick={() => {
+                    res = res.substr(0, res.length - 1)
+                    setValue("")
+                    console.log(value)
+                    setValue(res)
+                  }}
+                  colorScheme="orange"
+                >
+                  Clear Char
+                </Button>
+                <About />
+              </Grid>
             </Stack>
-
-            <Modal onClose={onClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>American Sign Language (ASL)</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-              <Text fontSize="sm">American Sign Language (ASL) is a visual language that serves as the predominant sign language of Deaf communities in the United States and most of Canada.<br></br>
-          Here's the list of ASL hand gestures for alphabet.</Text>
-          <Image src={handImages}/>
-          <Text fontSize="sm">This sign language illustration is created by <Link href="https://thenounproject.com/pelodrome/" isExternal color="orange.300">Pelin Kahraman</Link></Text>
-            
-          </ModalBody>
-          <ModalFooter>
-            <Button onClick={onClose}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-            
-
+          </Box>
+          {/* {isBrowser? <Button text="hh"/>:console.log(false)} */}
         </ChakraProvider>
+      </div>
     )
 }
 

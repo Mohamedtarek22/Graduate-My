@@ -1,6 +1,7 @@
 import {Finger, FingerCurl, FingerDirection, GestureDescription} from 'fingerpose';
 
 export const aSign = new GestureDescription('A');
+
 // [
 //     [
 //       "Thumb",
