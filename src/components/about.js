@@ -20,7 +20,7 @@ export default function About() {
     
     return (
         <div>
-            <Button onClick={onOpen} colorScheme="orange">Learn More</Button>
+            <Button style={{width:"152px"}} onClick={onOpen} colorScheme="orange">Learn More</Button>
             
             <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />

@@ -114,3 +114,14 @@ img{
 #emojis img.found{
     opacity: 1;
 }
+#start-button{
+    /* float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px; */
+    /* margin-left: 0px; */
+    margin-left: -70px;
+}

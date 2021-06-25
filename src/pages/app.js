@@ -10,6 +10,7 @@ import Handsigns from '../handsigns';
 import handImages from '../images/handImages.svg';
 
 import {
+    SimpleGrid,
     Text,
     Heading,
     Grid,
@@ -28,7 +29,8 @@ import {
   ModalCloseButton,
 useDisclosure,
 Link,
-    ChakraProvider
+    ChakraProvider,
+    transition
 } from '@chakra-ui/react'
 import { useSpeechSynthesis } from "react-speech-kit"
 
@@ -248,6 +250,7 @@ export default function App() {
                       right: "calc(50% - 50px)",
                       bottom: 100,
                       textAlign: "-webkit-center",
+                      transform:"translate(0,-82px)"
                     }}
                   >
                     <Text color="white" fontSize="sm" mb={1}>
@@ -289,11 +292,11 @@ export default function App() {
   
             <Stack
               id="start-button"
-              style={{ width: "100%",marginLeft: "-271px" }}
+              style={{ width: "100%",marginLeft: "-67px" }}
               direction="row"
               align="start"
             >
-              <Grid templateColumns="repeat(5, 1fr)" gap={6}>
+              <SimpleGrid columns={[2, null, 3]} spacing="10px">
                 <Button
                   onClick={() => speak({ text: value })}
                   // style={{ width: "36%", marginRight: "20" }}
@@ -336,7 +339,9 @@ export default function App() {
                   Clear Char
                 </Button>
                 <About />
-              </Grid>
+                </SimpleGrid>
+                
+              
             </Stack>
           </Box>
           {/* {isBrowser? <Button text="hh"/>:console.log(false)} */}
