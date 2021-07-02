@@ -34,7 +34,7 @@ Spacesign.addCurl(Finger.Thumb, FingerCurl.NoCurl, 0.8);
 Spacesign.addDirection(Finger.Index, FingerDirection.HorizontalLeft, 0.70);
 
 //Index
-Spacesign.addCurl(Finger.Index, FingerCurl.NoCurl, 1);
+Spacesign.addCurl(Finger.Index, FingerCurl.FullCurl, 1);
 Spacesign.addDirection(Finger.Index, FingerDirection.DiagonalUpLeft, 0.70);
 
 //Middle
